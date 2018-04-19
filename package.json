@@ -1,0 +1,25 @@
+{
+  "name": "node-sh",
+  "version": "0.1.0",
+  "description": "Call any program as if it were a Node.js function",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && mocha"
+  },
+  "author": "David A Roberts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidar/node-sh.git"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.1.0",
+    "standard": "^11.0.1",
+    "tmp": "0.0.33"
+  },
+  "dependencies": {
+    "duplexer": "^0.1.1",
+    "raw-body": "^2.3.2"
+  }
+}

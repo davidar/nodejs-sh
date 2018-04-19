@@ -1,9 +1,9 @@
-# node-sh
+# nodejs-sh
 
 This is a Node.js port of the [sh](https://amoffat.github.io/sh/) Python library, that allows you to call any program as if it were a function:
 
 ```js
-const {ifconfig} = require('node-sh')
+const {ifconfig} = require('nodejs-sh')
 
 let output = await ifconfig('eth0').toString()
 console.log(output)
@@ -25,7 +25,7 @@ eth0      Link encap:Ethernet  HWaddr 00:00:00:00:00:00
 ## Installation
 
 ```sh
-npm install node-sh
+npm install nodejs-sh
 ```
 
 ## Quick Reference
@@ -33,7 +33,7 @@ npm install node-sh
 ### Passing Arguments
 
 ```js
-const {ls} = require('node-sh')
+const {ls} = require('nodejs-sh')
 
 ls('-l', '/tmp', '--color=never').pipe(process.stdout)
 ```
@@ -41,7 +41,7 @@ ls('-l', '/tmp', '--color=never').pipe(process.stdout)
 ### Non-zero Exit Codes
 
 ```js
-const {ls} = require('node-sh')
+const {ls} = require('nodejs-sh')
 
 try {
   await ls('/doesnt/exist')
@@ -54,7 +54,7 @@ try {
 
 ```js
 const fs = require('fs')
-const {ls} = require('node-sh')
+const {ls} = require('nodejs-sh')
 
 let file = fs.createWriteStream('file.txt')
 ls('test/').pipe(file).on('finish', () => {
@@ -65,7 +65,7 @@ ls('test/').pipe(file).on('finish', () => {
 ### Piping
 
 ```js
-const {ls, wc} = require('node-sh')
+const {ls, wc} = require('nodejs-sh')
 
 let output = await ls('-1').pipe(wc('-l')).toString()
 ```
@@ -73,7 +73,7 @@ let output = await ls('-1').pipe(wc('-l')).toString()
 ### Background Processes
 
 ```js
-const {find} = require('node-sh')
+const {find} = require('nodejs-sh')
 
 let p = find('-name', 'index.js')
 // ... do other things ...

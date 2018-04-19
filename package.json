@@ -1,5 +1,5 @@
 {
-  "name": "node-sh",
+  "name": "nodejs-sh",
   "version": "0.1.0",
   "description": "Call any program as if it were a Node.js function",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davidar/node-sh.git"
+    "url": "git+https://github.com/davidar/nodejs-sh.git"
   },
   "devDependencies": {
     "chai": "^4.1.2",

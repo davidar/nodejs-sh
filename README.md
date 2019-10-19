@@ -79,3 +79,11 @@ let p = find('-name', 'index.js')
 // ... do other things ...
 await p
 ```
+
+### TypeScript
+
+```ts
+import * as sh from "nodejs-sh";
+
+const output = await sh.ls("-1").pipe(sh.wc("-l")).toString();
+```

@@ -5,17 +5,21 @@ import { Duplex } from "stream";
 class Process extends Duplex implements Promise<void> {
   private waiting = false;
 
-  public readonly then: <S = void, T = never>(resolve?: ((_: void) => S | PromiseLike<S>) | null,
-                                     reject?: ((reason: any) => T | PromiseLike<T>) | null) => Promise<S | T>;
-  public readonly catch: <T = never>(reject?: ((reason: any) => T | PromiseLike<T>) | null) => Promise<void | T>;
-  public readonly finally: (cb?: (() => void) | null) => Promise<void>;
+  readonly then: <S = void, T = never>(
+    resolve?: ((_: void) => S | PromiseLike<S>) | null,
+    reject?: ((exitCode: number) => T | PromiseLike<T>) | null
+  ) => Promise<S | T>;
+  readonly catch: <T = never>(
+    reject?: ((exitCode: number) => T | PromiseLike<T>) | null
+  ) => Promise<void | T>;
+  readonly finally: (cb?: (() => void) | null) => Promise<void>;
 
   constructor(private readonly proc: ChildProcess) {
     super();
 
-    const promise = new Promise<void>(function (resolve, reject) {
-      proc.on("close", code => (code === 0) ? resolve() : reject(code));
-    });
+    const promise = new Promise<void>((resolve, reject) =>
+      proc.on("close", code => (code === 0 ? resolve() : reject(code)))
+    );
     this.then = promise.then.bind(promise);
     this.catch = promise.catch.bind(promise);
     this.finally = promise.finally.bind(promise);
@@ -38,9 +42,12 @@ class Process extends Duplex implements Promise<void> {
 
   _read() {
     if (!this.proc.stdout) return;
-    let buf: Buffer | null = null;
     this.waiting = true;
-    while ((buf = this.proc.stdout.read()) !== null) {
+    for (
+      let buf = this.proc.stdout.read();
+      buf !== null;
+      buf = this.proc.stdout.read()
+    ) {
       this.push(buf);
       this.waiting = false;
     }
@@ -53,14 +60,15 @@ class Process extends Duplex implements Promise<void> {
   end(cb?: () => void): this;
   end(data: string | Uint8Array, cb?: () => void): this;
   end(str: string, encoding?: string, cb?: () => void): this;
-  end(...args: any) {
+  // tslint:disable-next-line
+  end(...args: any[]) {
     if (this.proc.stdin) this.proc.stdin.end(...args);
     return this;
   }
 
   [Symbol.toStringTag]: string;
   async toString(encoding: getRawBody.Encoding = true) {
-    let promise = getRawBody(this, { encoding });
+    const promise = getRawBody(this, { encoding });
     await this;
     return promise;
   }
@@ -70,9 +78,14 @@ interface ModuleProxy {
   [name: string]: (...args: string[]) => Process;
 }
 
-const sh = new Proxy<ModuleProxy>({}, {
-  get: (_, name: string) => (...args: string[]) =>
-    new Process(spawn(name, args, { stdio: ['pipe', 'pipe', process.stderr] }))
-});
+const sh = new Proxy<ModuleProxy>(
+  {},
+  {
+    get: (_, name: string) => (...args: string[]) =>
+      new Process(
+        spawn(name, args, { stdio: ["pipe", "pipe", process.stderr] })
+      ),
+  }
+);
 
 export = sh;

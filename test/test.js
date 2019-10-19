@@ -34,7 +34,7 @@ describe('Basic tests', function () {
   })
   it('pipe', async function () {
     const output = await ls('-1').pipe(wc('-l')).toString()
-    expect(output).to.equal('10\n')
+    expect(output).to.equal('11\n')
   })
   it('background', async function () {
     const p = sleep('1')

@@ -2,15 +2,20 @@
   "name": "nodejs-sh",
   "version": "0.1.0",
   "description": "Call any program as if it were a Node.js function",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "test": "mocha",
-    "check": "standard",
-    "compile": "tsc",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "check": "gts check",
+    "clean": "gts clean",
+    "compile": "tsc -p .",
+    "fix": "gts fix",
+    "prepare": "yarn run compile",
+    "pretest": "yarn run compile",
+    "posttest": "yarn run check"
   },
   "author": "David A Roberts",
   "license": "MIT",
@@ -19,26 +24,14 @@
     "url": "git+https://github.com/davidar/nodejs-sh.git"
   },
   "devDependencies": {
-    "@types/node": "^12.7.9",
-    "@typescript-eslint/eslint-plugin": "^2.3.2",
-    "@typescript-eslint/parser": "^2.3.2",
+    "@types/node": "^10.0.3",
     "chai": "^4.1.2",
-    "eslint": "^6.5.1",
+    "gts": "^1.1.0",
     "mocha": "^5.1.0",
-    "standard": "^14.3.1",
     "tmp": "0.0.33",
-    "typescript": "^3.6.3"
+    "typescript": "~3.5.0"
   },
   "dependencies": {
     "raw-body": "^2.3.2"
-  },
-  "standard": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint/eslint-plugin"
-    ],
-    "ignore": [
-      "index.js"
-    ]
   }
 }
